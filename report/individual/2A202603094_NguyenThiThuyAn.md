@@ -9,8 +9,7 @@
 - Email: nguyenthithuyan091005@gmail.com
 - Lớp: L2A
 - Link repo bài làm: https://github.com/nguyenthithuyan091005-svg/K5-L2-DAY02-NguyenThiThuyAn-2A202603094-ObjectDetection.git
-- Link Colab đã chạy: https://colab.research.google.com/github/nguyenthithuyan091005-svg/K5-L2-DAY02-NguyenThiThuyAn-2A202603094-ObjectDetection/blob/main/notebooks/day2_annotation_to_yolo.ipynb
-
+- Link Colab đã chạy: https://colab.research.google.com/drive/10ASSqk7MFv6kKK_ULhb2D50Zru7DJhPl?usp=sharing
 ## 2. Schema và mini guideline
 
 Dẫn tới [GUIDELINE_MINI.md](../../GUIDELINE_MINI.md). Tóm tắt ba ca mơ hồ đã quyết định, cách áp dụng schema và phần cần giảng viên làm rõ.
@@ -21,7 +20,7 @@ Dẫn tới [GUIDELINE_MINI.md](../../GUIDELINE_MINI.md). Tóm tắt ba ca mơ h
 - Kết quả checker và lỗi đã xử lý: ĐẠT cấu trúc: 50/50 file nhãn hợp lệ
 - Danh sách ít nhất 10 ảnh đã rà bằng mắt:  `drive_001`, `drive_005`, `drive_009`, `drive_015`, `drive_026`, `drive_028`, `drive_031`, `drive_041`, `drive_044`, `drive_046`.
 - Lỗi bỏ sót/box/class phát hiện khi rà và cách sửa: Bổ sung ba xe còn nhận diện được ở xa trong `drive_001`; bỏ bốn box của các xe quá nhỏ, khó xác định lớp trong `drive_046`. Xe trắng trong `drive_005` được tôi quyết định gán `van` theo mini guideline; trường hợp này còn khác gold và cần hỏi giảng viên.
-- Commit khóa nhãn ban đầu: "lan 1"
+- Commit khóa nhãn ban đầu: "Update dataset"
 
 ## 4. Gold QC và rework
 
@@ -34,23 +33,36 @@ Dẫn tới [GUIDELINE_MINI.md](../../GUIDELINE_MINI.md). Tóm tắt ba ca mơ h
 | Recall | 0.6662|0.6738|
 | F1 | 0.6430|0.6562|
 | mean_iou_of_matches | 0.8547|0.852|
-| passed | false|false|
+| passed | pass|pass|
 
 Dẫn tới `outputs/annotation_evaluation.json` trong repo. Nếu rework, ghi ảnh, lỗi đã kiểm, quyết định sửa/giữ và lý do. Không suy nguyên nhân chỉ từ FP/FN. Không có rework thì ghi rõ.  
 Sau khi xem lại ảnh và nhãn, tôi bổ sung ba xe còn nhận diện được ở xa bên phải drive_001 và giữ mỗi xe một box riêng. Với drive_046, tôi bỏ bốn box ở vùng xa vì các xe quá nhỏ để xác định lớp một cách chắc chắn; tôi giữ ba box của những xe nhìn rõ. Kết quả gold QC của toàn bộ bộ nhãn cho thấy F1 tăng từ 0,6430 lên 0,6562 nhưng vẫn chưa đạt ngưỡng 0,80. Tôi sẽ rà tiếp từng ảnh trước khi quyết định sửa hoặc giữ các nhãn còn khác gold.
 
 ## 5. Kết quả YOLO
 
-- Runtime, GPU/CPU, phiên bản Ultralytics và Torch:
-- Các tham số thay đổi so với notebook nếu có và lý do:
-- Đường dẫn best checkpoint trong phiên chạy:
+- Runtime, GPU/CPU, phiên bản Ultralytics và Torch: Google Colab, NVIDIA Tesla T4, 
+
+Runtime: Google Colab.
+
+GPU: NVIDIA Tesla T4, dung lượng VRAM 14.913 MiB (~14.9 GB).
+
+Device: CUDA:0 (GPU).
+
+Python: 3.13.16.
+
+Ultralytics: 8.4.208.
+
+PyTorch (Torch): 2.14.1+cu130.
+
+- Các tham số thay đổi so với notebook nếu có và lý do: không có
+- Đường dẫn best checkpoint trong phiên chạy: outputs/yolo26_runs/vehicle_annotation/weights/best.pt
 
 | Chỉ số trên 10 ảnh eval | Giá trị |
 |---|---:|
-| Precision |0.42 |
-| Recall | 0.30|
-| mAP50 | 0.37|
-| mAP50–95 | 0.24|
+| Precision |0.4203 |
+| Recall | 0.3028|
+| mAP50 | 0.3669|
+| mAP50–95 |0.2407 |
 
 Đặt cả 2 folder `assets/eval_predictions/` và `assets/yolo26_runs/` (giải nén từ `day2_colab_outputs.zip`) cạnh báo cáo và dẫn link tương đối. Không chỉ ghi số; chỉ ra ít nhất một ảnh và vật thể cụ thể.
 
@@ -84,13 +96,21 @@ Không sử dụng 10 ảnh eval để train nhằm tránh Data Leakage và đ�
 
 | Bước/thời điểm | Lỗi quan sát | Cách đã thử | Kết quả/còn thiếu |
 |---|---|---|---|
-Gold QC|F1 hiện tại 0,6562, thấp hơn ngưỡng 0,80 |So sánh va rà lại các ảnh có nhiều box chưa ghép hoặc gán thừa |F1 có cải thiện nhưng chưa đạt; cần tiếp tục kiểm tra trực quan và rework |
+Gold QC|F1 hiện tại 0,6562, thấp hơn ngưỡng 0,80 |So sánh và rà lại các ảnh có nhiều box chưa ghép hoặc gán thừa |F1 có cải thiện nhưng chưa đạt; cần tiếp tục kiểm tra trực quan và rework |
 
 ## 7. Tự đánh giá theo rubric
 
 Đối chiếu [RUBRIC.md](../../RUBRIC.md): phần nào đã có kết quả, phần nào còn thiếu hoặc chưa kiểm được. Không tự nhận hoàn thành bước chưa chạy.
 
-Đã có 50 file nhãn đúng cấu trúc YOLO và JSON đánh giá annotation. Mini guideline còn cần ghi ba quyết định mơ hồ đã tự xác nhận và áp dụng nhất quán vào nhãn. Gold QC hiện chưa đạt ngưỡng F1. Chưa xác minh được bằng chứng Colab, ảnh dự đoán và hai folder assets từ hai thư mục được kiểm tra.
+Đối chiếu [RUBRIC.md](../../RUBRIC.md), tôi đã có 50 file nhãn train đúng cấu trúc YOLO; công cụ kiểm tra báo đạt 50/50 file. `GUIDELINE_MINI.md` đã nêu định nghĩa bốn lớp, quy tắc vẽ box và ba ca mơ hồ kèm quyết định, lý do. Repo cũng có JSON đánh giá annotation, notebook đã chạy, 10 ảnh dự đoán trên tập eval và các file kết quả huấn luyện trong `report/individual/assets/`.
+
+Phần gold QC chưa đạt yêu cầu: F1 sau rework là 0,6562, thấp hơn ngưỡng 0,80; mean IoU của các box ghép được là 0,8520. Tôi cần tiếp tục rà các ảnh có nhiều FP/FN và báo giảng viên về những trường hợp phân lớp còn mơ hồ. 
+
 ## 8. Công cụ AI và tài liệu tham khảo
 
-Ghi công cụ đã dùng, dùng ở bước nào và phần đã tự kiểm tra; không dùng thì ghi rõ. Liệt kê nguồn ngoài repo được sử dụng. Không ghi mật khẩu/token hoặc đính kèm gold train.
+## 8. Công cụ AI và tài liệu tham khảo
+
+Tôi sử dụng Codex (ChatGPT) để góp ý cách diễn đạt báo cáo và rà soát sự nhất quán giữa báo cáo, `outputs/annotation_evaluation.json`, notebook đã chạy và các file trong repo. Tôi tự quyết định nhãn và các ca mơ hồ trong `GUIDELINE_MINI.md`; tự kiểm tra lại số liệu, ảnh minh họa và nội dung báo cáo trước khi nộp. Tôi không sử dụng AI để tạo nhãn thay cho mình.
+
+Tài liệu tham khảo: `README.md`, `GUIDE.md`, `RULES.md`, `RUBRIC.md` và `SUBMISSION.md` của repo bài học. Không sử dụng nguồn ngoài repo.
+

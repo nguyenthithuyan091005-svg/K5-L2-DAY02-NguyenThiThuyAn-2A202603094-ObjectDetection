@@ -108,8 +108,6 @@ Phần gold QC chưa đạt yêu cầu: F1 sau rework là 0,6562, thấp hơn ng
 
 ## 8. Công cụ AI và tài liệu tham khảo
 
-## 8. Công cụ AI và tài liệu tham khảo
-
 Tôi sử dụng Codex (ChatGPT) để góp ý cách diễn đạt báo cáo và rà soát sự nhất quán giữa báo cáo, `outputs/annotation_evaluation.json`, notebook đã chạy và các file trong repo. Tôi tự quyết định nhãn và các ca mơ hồ trong `GUIDELINE_MINI.md`; tự kiểm tra lại số liệu, ảnh minh họa và nội dung báo cáo trước khi nộp. Tôi không sử dụng AI để tạo nhãn thay cho mình.
 
 Tài liệu tham khảo: `README.md`, `GUIDE.md`, `RULES.md`, `RUBRIC.md` và `SUBMISSION.md` của repo bài học. Không sử dụng nguồn ngoài repo.
